@@ -33,8 +33,12 @@
 
 
   <script>
-    var map = L.map('map').setView([41.0082,28.9784], 6.5);
-
+var turkeyBounds = L.latLngBounds([[35.8087, 25.9333], [42.1415, 44.8172]]);
+    var map = L.map('map', {
+      maxBounds: turkeyBounds,
+      minZoom: 7,
+      maxZoom: 12
+    }).fitBounds(turkeyBounds);
 L.tileLayer('https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=SQHJLoOGsmewUwH8QGLp', {
     attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
 }).addTo(map);
@@ -78,7 +82,7 @@ var markers = [
 	{ name: 'İzmir', lat: 38.4237, lng: 27.1428, ratio: [0.25, 0.5, 0.75, 1] },
 	{ name: 'Kars', lat: 40.6069, lng: 43.0970, ratio: [0.25, 0.5, 0.75, 1] },
 	{ name: 'Kastamonu', lat: 41.3887, lng: 33.7827, ratio: [0.25, 0.5, 0.75, 1] },
-  { name: 'Kayseri', lat: 38.7333, lng: 35.4833, ratio: [0.25, 0.5, 0.75, 1] },
+  { name: 'Zonguldak', lat: 41.4559, lng: 31.7987,ratio: [0.25, 0.5, 0.75, 1] },
 	{ name: 'Kırıkkale', lat: 39.8468, lng: 33.5153, ratio: [0.25, 0.5, 0.75, 1] },
 	{ name: 'Kırklareli', lat: 41.7333, lng: 27.2167,ratio: [0.25, 0.5, 0.75, 1] },
 	{ name: 'Kırşehir', lat: 39.1425, lng: 34.1709, ratio: [0.25, 0.5, 0.75, 1] },
@@ -109,14 +113,14 @@ var markers = [
 	{ name: 'Van', lat: 38.4891, lng: 43.4089,ratio: [0.25, 0.5, 0.75, 1] },
 	{ name: 'Yalova', lat: 40.6500, lng: 29.2667,ratio: [0.25, 0.5, 0.75, 1] },
 	{ name: 'Yozgat', lat: 39.8200, lng: 34.8044, ratio: [0.25, 0.5, 0.75, 1] },
-	{ name: 'Zonguldak', lat: 41.4559, lng: 31.7987,ratio: [0.25, 0.5, 0.75, 1] }
+  { name: 'Kayseri', lat: 38.7333, lng: 35.4833, ratio: [0.25, 0.5, 0.75, 1] },
 ];
 
 for (var i = 0; i < markers.length; i++) {
   var marker = markers[i];
   var popupContent = '<b>' + marker.name + '</b><br>';
   for (var j = 0; j < precinctNames.length; j++) {
-    popupContent += precinctNames[j] + ': ' + marker.ratio[j] * 100 + '%<br>';
+    popupContent += precinctNames[j] + ': ' +  marker.ratio[j] * 100 + '%<br>';
   }
   L.marker([marker.lat, marker.lng]).addTo(map)
     .bindPopup(popupContent)
