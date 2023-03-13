@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Turkey Presidential Elections Map</title>
+  <link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+
+</head>
+<body>
+
+  <nav>
+    <div class="logo">
+      <img src="nerd.png" alt="Company Logo">
+    </div>
+    <ul class="nav-links">
+      <li><a href="#">Ana sayfa </a></li>
+      <li><a href="#">Hakkımızda</a></li>
+      <li><a href="#">Bize Ulaşın</a></li>
+    </ul>
+  </nav>
+  
+  
+	<div id="map"></div>
+
+  <div class="map-vote">
+    <p class="ph" >2023 Cumhurbaşkanlığı seçimi katil</p>
+    <button onclick="vote()">şimdi oyla</button>
+</div>
+
+
+
+
+  <script>
+    var map = L.map('map').setView([41.0082,28.9784], 6.5);
+
+L.tileLayer('https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=SQHJLoOGsmewUwH8QGLp', {
+    attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+}).addTo(map);
+
+var precinctNames = ['Recep Tayyip Erdoğan', 'Kemal Kılıçdaroğlu', 'Muharrem İnce', 'Doğu Perinçek'];
+
+var markers = [
+	{ name: 'Adana', lat: 37.0000, lng: 35.3213, ratio: [0.25, 0.5, 0.75, 1]   },
+	{ name: 'Adıyaman', lat: 37.7648, lng: 38.2762, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Afyonkarahisar', lat: 38.7507, lng: 30.5566, ratio:[0.25, 0.5, 0.75, 1]},
+	{ name: 'Ağrı', lat: 39.6550, lng: 43.0178, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Amasya', lat: 40.6533, lng: 35.8328, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Ankara', lat: 39.9334, lng: 32.8597,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Antalya', lat: 36.9081, lng: 30.6956, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Artvin', lat: 41.1828, lng: 41.8199, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Aydın', lat: 37.8444, lng: 27.8458, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Balıkesir', lat: 39.6492, lng: 27.8863, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Bilecik', lat: 40.0567, lng: 30.0662, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Bitlis', lat: 38.3936, lng: 42.1239, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Bolu', lat: 40.7392, lng: 31.6116, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Burdur', lat: 37.4613, lng: 30.0662, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Bursa', lat: 40.1826, lng: 29.0669, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Çanakkale', lat: 40.1553, lng: 26.4142, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Çankırı', lat: 40.6009, lng: 33.6134, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Çorum', lat: 40.5506, lng: 34.9556, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Denizli', lat: 37.7765, lng: 29.0864,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Diyarbakır', lat: 37.9209, lng: 40.2365, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Edirne', lat: 41.6818, lng: 26.5623,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Elazığ', lat: 38.6810, lng: 39.2264, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Erzincan', lat: 39.7522, lng: 39.4928, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Erzurum', lat: 39.9086, lng: 41.2768, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Eskişehir', lat: 39.7669, lng: 30.5256,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Gaziantep', lat: 37.0662, lng: 37.3833, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Giresun', lat: 40.9130, lng: 38.3895,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Gümüşhane', lat: 40.4604, lng: 39.4818, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Hakkari', lat: 37.5734, lng: 43.7405,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Hatay', lat: 36.4018, lng: 36.3498, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Isparta', lat: 37.7648, lng: 30.5566, ratio: [0.25, 0.5, 0.75, 1]},
+	{ name: 'Mersin', lat: 36.8000, lng: 34.6333, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'İstanbul', lat: 41.0082, lng: 28.9784, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'İzmir', lat: 38.4237, lng: 27.1428, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Kars', lat: 40.6069, lng: 43.0970, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Kastamonu', lat: 41.3887, lng: 33.7827, ratio: [0.25, 0.5, 0.75, 1] },
+  { name: 'Kayseri', lat: 38.7333, lng: 35.4833, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Kırıkkale', lat: 39.8468, lng: 33.5153, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Kırklareli', lat: 41.7333, lng: 27.2167,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Kırşehir', lat: 39.1425, lng: 34.1709, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Kocaeli', lat: 40.8533, lng: 29.8815,ratio: [0.25, 0.5, 0.75, 1]},
+	{ name: 'Konya', lat: 37.8667, lng: 32.4833, ratio: [0.25, 0.5, 0.75, 1]},
+	{ name: 'Kütahya', lat: 39.4167, lng: 29.9833,ratio: [0.25, 0.5, 0.75, 1]},
+	{ name: 'Malatya', lat: 38.3552, lng: 38.3095,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Manisa', lat: 38.6131, lng: 27.4269, ratio: [0.25, 0.5, 0.75, 1]},
+	{ name: 'Kahramanmaraş', lat: 37.5858, lng: 36.9264, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Mardin', lat: 37.3122, lng: 40.7350,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Muğla', lat: 37.2153, lng: 28.3636,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Muş', lat: 38.7415, lng: 41.4975,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Nevşehir', lat: 38.6241, lng: 34.7126,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Niğde', lat: 37.9667, lng: 34.6833,ratio: [0.25, 0.5, 0.75, 1]},
+	{ name: 'Ordu', lat: 40.9848, lng: 37.8783, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Rize', lat: 41.0201, lng: 40.5234, ratio: [0.25, 0.5, 0.75, 1]},
+	{ name: 'Sakarya', lat: 40.7569, lng: 30.3781, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Samsun', lat: 41.2928, lng: 36.3313, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Siirt', lat: 37.9323, lng: 41.9406, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Sinop', lat: 42.0231, lng: 35.1531,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Sivas', lat: 39.7477, lng: 37.0179,ratio: [0.25, 0.5, 0.75, 1]},
+	{ name: 'Tekirdağ', lat: 40.9833, lng: 27.5167, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Tokat', lat: 40.3167, lng: 36.5500,ratio: [0.25, 0.5, 0.75, 1]},
+	{ name: 'Trabzon', lat: 41.0018, lng: 39.7178, ratio: [0.25, 0.5, 0.75, 1]},
+  { name: 'Tunceli', lat: 39.1108, lng: 39.5486,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Şanlıurfa', lat: 37.1591, lng: 38.7969,ratio: [0.25, 0.5, 0.75, 1]},
+	{ name: 'Uşak', lat: 38.6667, lng: 29.4167, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Van', lat: 38.4891, lng: 43.4089,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Yalova', lat: 40.6500, lng: 29.2667,ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Yozgat', lat: 39.8200, lng: 34.8044, ratio: [0.25, 0.5, 0.75, 1] },
+	{ name: 'Zonguldak', lat: 41.4559, lng: 31.7987,ratio: [0.25, 0.5, 0.75, 1] }
+];
+
+for (var i = 0; i < markers.length; i++) {
+  var marker = markers[i];
+  var popupContent = '<b>' + marker.name + '</b><br>';
+  for (var j = 0; j < precinctNames.length; j++) {
+    popupContent += precinctNames[j] + ': ' + marker.ratio[j] * 100 + '%<br>';
+  }
+  L.marker([marker.lat, marker.lng]).addTo(map)
+    .bindPopup(popupContent)
+    .openPopup();
+}
+
+  </script>
+<script src="app.js"></script>	
+</body>
+</html>
